@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}"
+>
+<!--여기에 있는 내용을 basic.html에 껴넣겠다-->
+<div layout:fragment="content">
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    게시판
+                </div>
+                <div class="card-body">
+                    <div class="input-group mb3">
+                        <span class="input-group-text">제목</span>
+                        <input type="text" name="title" class="form-control" th:value="${dto.title}" readonly>
+                    </div>
+                    <div class="input-group mb3">
+                        <span class="input-group-text">내용</span>
+                        <textarea name="content" class="form-control col-sm-5" rows="5"  readonly>[[${dto.content}]]</textarea>
+                    </div>
+                    <div class="input-group mb3">
+                        <span class="input-group-text">작성자</span>
+                        <input type="text" name="user_id" class="form-control" th:value="${dto.user_id}" readonly>
+                    </div>
+                    <div class="input-group mb3">
+                        <span class="input-group-text">노출날짜</span>
+                        <input type="text" name="display_date" class="form-control" th:value="${dto.display_date}" readonly>
+                    </div>
+                    <div class="input-group mb3">
+                        <span class="input-group-text">수정일</span>
+                        <input type="text" name="modify_date" class="form-control" th:value="${dto.modify_date}" readonly>
+                    </div>
+                    <div class="input-group mb3">
+                        <span class="input-group-text">등록일</span>
+                        <input type="text" name="reg_date" class="form-control" th:value="${dto.reg_date}" readonly>
+                    </div>
+                    <div class="my-4">
+                        <div class="float-end" th:with="link=${pageRequestDTO.getLinkParams()}">
+                            <a th:href="|@{/board/list}?${link}|" class="text-decoration-none">
+                                <button type="button" class="btn btn-primary">목록</button>
+                            </a>
+                            <a th:href="|@{/board/modify(idx=${dto.idx})}&${link}|" class="text-decoration-none">
+                                <button type="button"  class="btn btn-secondary">수정</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

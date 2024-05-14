@@ -32,12 +32,41 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     //testImplementation 'org.springframework.security:spring-security-test'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.3.0'
+
+    //Querydsl 사용 설정 부분 =======================================>
+    //부트에서 6.0 대는 쓰지 마셈. 스프링도 6.1.xx 버전 사용해
+    implementation 'jakarta.annotation:jakarta.annotation-api'
+    implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
+
+    annotationProcessor 'com.querydsl:querydsl-apt:5.1.0:jakarta'
+    annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+    annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
+    //Querydsl 사용 설정 부분 =======================================>
+
+    implementation 'org.modelmapper:modelmapper:3.2.0'
+
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
+//Querydsl 사용 설정 부분 =======================================>
+sourceSets {
+    main {
+        java {
+            srcDirs = [
+                    "$projectDir/src/main/java", "$buildDir/generated/querydsl"
+            ]
+        }
+    }
+}
+//Querydsl 사용 설정 부분 =======================================>

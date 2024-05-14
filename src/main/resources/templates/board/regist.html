@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}"
+>
+<!--여기에 있는 내용을 basic.html에 껴넣겠다-->
+<div layout:fragment="content">
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    게시판
+                </div>
+                <div class="card-body">
+                    <form name="frmRegist" action="/board/regist" method="post">
+                        <div class="input-group mb3">
+                            <span class="input-group-text">제목</span>
+                            <input type="text" name="title" class="form-control" value="" >
+                        </div>
+                        <div class="input-group mb3">
+                            <span class="input-group-text">내용</span>
+                            <textarea name="content" class="form-control col-sm-5" rows="5"></textarea>
+                        </div>
+                        <div class="input-group mb3">
+                            <span class="input-group-text">작성자</span>
+                            <input type="text" name="user_id" class="form-control" value="test">
+                        </div>
+                        <div class="input-group mb3">
+                            <span class="input-group-text">노출날짜</span>
+                            <input type="text" name="display_date" class="form-control" value="" maxlength="10">
+                        </div>
+                        <div class="my-4">
+                            <div class="float-end" >
+                                <button type="submit" class="btn btn-primary registBtn">등록</button>
+                                <button type="reset" class="btn btn-secondary cancelBtn">취소</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+    const errors = [[${errors}]];
+    console.log("errors : {}", errors);
+
+    let errMsg = "";
+    if (errors) {
+        for (let i =0; i<errors.length; i++) {
+            errMsg += `${errors[i].field} 은(는) ${errors[i].code}\n`;
+        }
+        alert(errMsg);
+    }
+</script>

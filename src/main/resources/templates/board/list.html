@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}"
+>
+<!--여기에 있는 내용을 basic.html에 껴넣겠다-->
+<div layout:fragment="content">
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    게시판
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Board List</h5>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">인덱스</th>
+                                <th scope="col">제목</th>
+                                <th scope="col">작성자</th>
+                                <th scope="col">노출일자</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="dto:${pageResponseDTO.dtoList}">
+                                <th scope="row">[[${dto.idx}]]</th>
+                                <td><a th:href="|@{/board/view(idx=${dto.idx})}&${link}|">[[${dto.title}]]</a></td>
+                                <td>[[${dto.user_id}]]</td>
+                                <td>[[${dto.display_date}]]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="float-end">
+                        <ul class="pagination flex-wrap">
+                            <li class="page-item" th:if="${pageResponseDTO.prev_page_flag}">
+                                <a class="page-link" th:data-num="${pageResponseDTO.page_block_start-1}" >Prev</a>
+                            </li>
+
+                            <th:block th:each="i:${#numbers.sequence(pageResponseDTO.page_block_start, pageResponseDTO.page_block_end)}">
+                                <li th:class="${pageResponseDTO.page == i} ? 'page-item active' : 'page-item'">
+                                    <a class="page-link" th:data-num="${i}">[[${i}]]</a>
+                                </li>
+                            </th:block>
+                            <li class="page-item" th:if="${pageResponseDTO.next_page_flag}">
+                                <a class="page-link" th:data-num="${pageResponseDTO.page_block_end+1}" >Next</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

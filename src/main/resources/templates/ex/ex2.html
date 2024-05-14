@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <h3>쿼리스트링 링크</h3>
+    <a th:href="@{/hello(name='AAA', age=16)}">쿼리스트링</a>
+    <br>
+
+    <a th:href="@{/hello(types=${ {'AAA', 'BBB', 'CCC'} }, age=16)}">객체</a>
+    <br>
+
+    <a th:href="@{/hello(name='한글', 나이=16)}" id="han">한글 파라미터</a>
+
+    <script>
+        const han = document.getElementById("han");
+        han.addEventListener("click", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            alert("자바스크립트");
+            window.location.replace("/hello?name=한글&나이=16");
+        }, false)
+    </script>
+
+    <br><hr><br>
+
+    <div th:text="${list}"></div>
+
+    <div th:text="${map}"></div>
+
+    <div th:text="${dto}"></div>
+
+<script th:inline="javascript">
+    const list = [[${list}]];
+    const map = [[${map}]];
+    const dto = [[${dto}]];
+    console.log("list : " + list);
+    console.log("map : " + map);
+    console.log("dto : " + dto);
+</script>
+
+</body>
+</html>

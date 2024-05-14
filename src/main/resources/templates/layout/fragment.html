@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Layout</title>
+</head>
+<body>
+
+<div><h3>헤더 영역</h3></div>
+
+<div layout:fragment="content">
+    <p>페이지 컨텐츠 영역</p>
+    <p><a href="?파라미터">페이징</a></p>
+</div>
+
+<div><h3>푸터 영역</h3></div>
+
+<th:block layout:fragment="script">
+
+</th:block>
+
+</body>
+</html>
