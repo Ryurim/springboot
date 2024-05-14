@@ -43,11 +43,16 @@ public class PageResponseDTO<E> {
         this.page_block_size = pageRequestDTO.getPage_block_size();
         this.page_block_start = pageRequestDTO.getPage_block_start();
         this.page_block_end = pageRequestDTO.getPage_block_end();
+
+        setPage_block_end();
+        setPage_block_start();
+
         this.prev_page_flag = (this.page_block_start > 1);
         this.next_page_flag = (this.total_page > this.page_block_end);
         this.dtoList = dtoList;
 
         this.linkParams = "?page_size=" + this.page_size;
+
 
         log.info("pageRequestDTO : {}" , pageRequestDTO);
         log.info("dtoList : {}" , dtoList);
@@ -66,9 +71,13 @@ public class PageResponseDTO<E> {
         return (this.page - 1) * this.page_size;
     }
     public void setPage_block_start() {
-        this.page_block_start = ((int)Math.floor(this.page/(double)this.page_block_size)*this.page_block_size)+1;
+//        this.page_block_start = ((int)Math.floor(this.page/(double)this.page_block_size)*this.page_block_size)+1;
+        this.page_block_start = (int)(Math.ceil(this.page / (double)this.page_block_size) -1 ) * this.page_block_size + 1;
     }
     public void setPage_block_end() {
-        this.page_block_end = (int)(Math.floor(this.page/(double)this.page_block_size)*this.page_block_size) + this.page_block_size;
+//        this.page_block_end = (int)(Math.floor(this.page/(double)this.page_block_size)*this.page_block_size) + this.page_block_size;
+//        this.page_block_end = (this.page_block_end < this.total_page ? this.page_block_end : this.total_page);
+        this.page_block_end = (int)Math.ceil(this.page / (double)this.page_block_size) * this.page_block_size;
+        this.page_block_end = this.page_block_end > this.total_page ? this.total_page : this.page_block_end;
     }
 }

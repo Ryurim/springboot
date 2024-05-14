@@ -33,7 +33,7 @@ public class PageRequestDTO {
     @Builder.Default
     private int page_block_start=1;
     @Builder.Default
-    private int page_block_end=1;
+    private int page_block_end=10;
 
     private String search_type; //검색타입 (title:제목, content:내용, user_id:사용자ID...)
     private String[] search_types;
