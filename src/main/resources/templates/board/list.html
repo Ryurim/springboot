@@ -33,17 +33,17 @@
                     </table>
                     <div class="float-end">
                         <ul class="pagination flex-wrap">
-                            <li class="page-item" th:if="${pageResponseDTO.prev_page_flag}">
-                                <a class="page-link" th:data-num="${pageResponseDTO.page_block_start-10}" th:href="|@{/board/list}?page=${pageResponseDTO.page_block_start-10}|">Prev</a>
+                            <li class="page-item" th:if="${pageRequestDTO.prev_page_flag}">
+                                <a class="page-link" th:data-num="${pageRequestDTO.page_block_start-10}" th:href="|@{/board/list}?page=${pageRequestDTO.page_block_start-10}|">Prev</a>
                             </li>
 
-                            <th:block th:each="i:${#numbers.sequence(pageResponseDTO.page_block_start, pageResponseDTO.page_block_end)}">
-                                <li th:class="${pageResponseDTO.page == i} ? 'page-item active' : 'page-item'">
+                            <th:block th:each="i:${#numbers.sequence(pageRequestDTO.page_block_start, pageRequestDTO.page_block_end)}">
+                                <li th:class="${pageRequestDTO.page == i} ? 'page-item active' : 'page-item'">
                                     <a class="page-link" th:data-num="${i}" th:href="|@{/board/list}?page=${i}|">[[${i}]]</a>
                                 </li>
                             </th:block>
-                            <li class="page-item" th:if="${pageResponseDTO.next_page_flag}">
-                                <a class="page-link" th:data-num="${pageResponseDTO.page_block_end+1}" th:href="|@{/board/list}?page=${pageResponseDTO.page_block_end+1}|">Next</a>
+                            <li class="page-item" th:if="${pageRequestDTO.next_page_flag}">
+                                <a class="page-link" th:data-num="${pageRequestDTO.page_block_end+1}" th:href="|@{/board/list}?page=${pageRequestDTO.page_block_end+1}|">Next</a>
                             </li>
 
                         </ul>
