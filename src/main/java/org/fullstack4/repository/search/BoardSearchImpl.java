@@ -1,10 +1,13 @@
 package org.fullstack4.repository.search;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
 import lombok.extern.log4j.Log4j2;
 import org.fullstack4.domain.BoardEntity;
 import org.fullstack4.domain.QBoardEntity;
+import org.fullstack4.domain.QBoardReplyEntity;
+import org.fullstack4.dto.BoardListDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -43,8 +46,8 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
         log.info("query : {}", query);
 
         List<BoardEntity> boards = query.fetch();
-//        int total = (int)query.fetchCount(); //얘는 기본 타입이 long 임
-        long total = query.fetchCount();
+        int total = (int)query.fetchCount(); //얘는 기본 타입이 long 임
+       // long total = query.fetchCount();
 
         log.info("boards : {}" , boards);
         log.info("total : {}", total);
@@ -97,5 +100,64 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
         log.info("=========================================");
 
         return new PageImpl<>(boards, pageable, total);
+    }
+
+    @Override
+    public Page<BoardListDTO> searchWithReplyCnt(Pageable pageable, String[] types, String search_keyword) {
+        log.info("=====================================");
+        log.info("BoardSearchImpl >> searchWithReplyCnt START");
+
+        QBoardEntity qBoard = QBoardEntity.boardEntity;
+        QBoardReplyEntity replyQ = QBoardReplyEntity.boardReplyEntity;
+
+        JPQLQuery<BoardEntity> query = from(qBoard);
+        query.leftJoin(replyQ).on(replyQ.board.eq(qBoard));
+        query.groupBy(qBoard);
+
+        if ( (types != null && types.length > 0)
+                && (search_keyword != null && search_keyword.length() > 0)) {
+            BooleanBuilder booleanBuilder = new BooleanBuilder();
+            //type:t-제목, c:내용, w:사용자아이디
+            for ( String type : types){
+                switch (type){
+                    case "t":
+                        booleanBuilder.or(qBoard.title.like("%"+search_keyword+"%"));
+                        break;
+                    case "c":
+                        booleanBuilder.or(qBoard.content.like("%"+search_keyword+"%"));
+                        break;
+                    case "u":
+                        booleanBuilder.or(qBoard.user_id.like("%"+search_keyword+"%"));
+                        break;
+                }
+            }
+            query.where(booleanBuilder);
+        }
+        query.where(qBoard.idx.gt(0));
+
+        JPQLQuery<BoardListDTO> dtoQuery = query.select(
+                Projections.bean(BoardListDTO.class,
+                        qBoard.idx,
+                        qBoard.user_id,
+                        qBoard.title,
+                        qBoard.content,
+                        qBoard.display_date,
+                        qBoard.reg_date,
+                        qBoard.modify_date,
+                        replyQ.count().as("reply_cnt")
+                ));
+
+        this.getQuerydsl().applyPagination(pageable, dtoQuery);
+        List<BoardListDTO> dtoList = dtoQuery.fetch();
+        int count = (int)dtoQuery.fetchCount();
+
+        log.info("=====================================");
+        log.info("BoardSearchImpl >> searchWithReplyCnt START");
+        log.info("dtoQuery : {}", dtoQuery);
+        log.info("dtoList : {}", dtoList);
+        log.info("count : {}", count);
+        log.info("BoardSearchImpl >> searchWithReplyCnt END");
+        log.info("=====================================");
+        return new PageImpl<>(dtoList, pageable, count);
     }
 }

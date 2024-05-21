@@ -12,16 +12,25 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@Table(name="tbl_board_reply")
+@ToString(exclude = "board")
+@Table(
+        name="tbl_board_reply",
+        indexes = {
+                @Index(name="idx_tbl_board_reply_bbs_idx", columnList = "board_idx")
+        }
+)
 public class BoardReplyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private int idx;
 
-    @Column(nullable = false)
-    private int board_idx;
+//    @Column(nullable = false)
+//    private int board_idx;
+
+    //조인하기 위해 보드 엔티티 객체로 받음
+    @ManyToOne(fetch = FetchType.LAZY)
+    private BoardEntity board;
 
     @Column(length = 20, nullable = false)
     private String user_id;
@@ -43,9 +52,10 @@ public class BoardReplyEntity {
     @Column(name="modify_date", nullable = true, insertable = false, updatable = true)
     private LocalDateTime modify_date;
 
-    public void modify(String user_id, String title, String content) {
+    public void modify(String user_id, String title, String content, String display_date) {
         this.user_id = user_id;
         this.title = title;
         this.content = content;
+        this.display_date = display_date;
     }
 }

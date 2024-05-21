@@ -6,7 +6,7 @@ import org.fullstack4.domain.BoardReplyEntity;
 import org.fullstack4.dto.BoardReplyDTO;
 import org.fullstack4.dto.PageRequestDTO;
 import org.fullstack4.dto.PageResponseDTO;
-import org.fullstack4.repository.search.BoardReplyRepository;
+import org.fullstack4.repository.BoardReplyRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

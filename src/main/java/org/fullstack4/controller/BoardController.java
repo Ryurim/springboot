@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.fullstack4.dto.BoardDTO;
+import org.fullstack4.dto.BoardListDTO;
 import org.fullstack4.dto.PageRequestDTO;
 import org.fullstack4.dto.PageResponseDTO;
 import org.fullstack4.service.BoardServiceIf;
@@ -27,7 +28,8 @@ public class BoardController {
             PageRequestDTO pageRequestDTO,
             Model model
     ) {
-        PageResponseDTO<BoardDTO> pageResponseDTO = boardService.list(pageRequestDTO);
+       // PageResponseDTO<BoardDTO> pageResponseDTO = boardService.list(pageRequestDTO);
+        PageResponseDTO<BoardListDTO> pageResponseDTO = boardService.list(pageRequestDTO);
 
         log.info("pageResponseDTO: {}", pageResponseDTO);
         model.addAttribute("pageResponseDTO", pageResponseDTO);

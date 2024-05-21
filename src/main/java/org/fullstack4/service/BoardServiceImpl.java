@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.fullstack4.domain.BoardEntity;
 import org.fullstack4.dto.BoardDTO;
+import org.fullstack4.dto.BoardListDTO;
 import org.fullstack4.dto.PageRequestDTO;
 import org.fullstack4.dto.PageResponseDTO;
 import org.fullstack4.repository.BoardRepository;
@@ -53,23 +54,46 @@ public class BoardServiceImpl implements BoardServiceIf{
     public void delete(int idx) {
         boardRepository.deleteById(idx);
     }
+//
+//    @Override
+//    public PageResponseDTO<BoardDTO> list(PageRequestDTO pageRequestDTO) {
+//        String[] types = pageRequestDTO.getSearch_types();
+//        String search_word = pageRequestDTO.getSearch_word();
+//        PageRequest pageable = pageRequestDTO.getPageable();
+////        Page<BoardEntity> result = boardRepository.search2(pageable, types, search_word);
+//        Page<BoardListDTO> result = boardRepository.searchWithReplyCnt(pageable, types, search_word);
+//
+//        List<BoardDTO> dtoList = result.getContent().stream()
+//                .map(board ->modelMapper.map(board, BoardDTO.class))
+//                .collect(Collectors.toList());
+//
+//
+//        return PageResponseDTO.<BoardDTO>withAll()
+//                .pageRequestDTO(pageRequestDTO)
+//                .dtoList(dtoList)
+//                .total_count((int)result.getTotalElements())
+//                .build();
+//    }
+@Override
+//public PageResponseDTO<BoardDTO> list(PageRequestDTO pageRequestDTO) {
+public PageResponseDTO<BoardListDTO> list(PageRequestDTO pageRequestDTO) {
+    String[] types = pageRequestDTO.getSearch_types();
+    String search_word = pageRequestDTO.getSearch_word();
+    PageRequest pageable = pageRequestDTO.getPageable("idx");
+    //Page<BoardEntity> result = boardRepository.search2(pageable, types, search_word);
+    Page<BoardListDTO> result =
+            boardRepository.searchWithReplyCnt(pageable,
+                    types,
+                    search_word);
 
-    @Override
-    public PageResponseDTO<BoardDTO> list(PageRequestDTO pageRequestDTO) {
-        String[] types = pageRequestDTO.getSearch_types();
-        String search_word = pageRequestDTO.getSearch_word();
-        PageRequest pageable = pageRequestDTO.getPageable();
-        Page<BoardEntity> result = boardRepository.search2(pageable, types, search_word);
+    List<BoardListDTO> dtoList = result.getContent().stream()
+            .map(board->modelMapper.map(board, BoardListDTO.class))
+            .collect(Collectors.toList());
 
-        List<BoardDTO> dtoList = result.getContent().stream()
-                .map(board ->modelMapper.map(board, BoardDTO.class))
-                .collect(Collectors.toList());
-
-
-        return PageResponseDTO.<BoardDTO>withAll()
-                .pageRequestDTO(pageRequestDTO)
-                .dtoList(dtoList)
-                .total_count((int)result.getTotalElements())
-                .build();
-    }
+    return PageResponseDTO.<BoardListDTO>withAll()
+            .pageRequestDTO(pageRequestDTO)
+            .dtoList(dtoList)
+            .total_count((int)result.getTotalElements())
+            .build();
+}
 }

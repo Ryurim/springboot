@@ -2,6 +2,7 @@ package org.fullstack4.repository;
 
 import lombok.extern.log4j.Log4j2;
 import org.fullstack4.domain.BoardEntity;
+import org.fullstack4.dto.BoardListDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -148,5 +149,30 @@ public class BoardRepositoryTests {
 
         log.info("BoardRepositoryTests >> testSearch2 END");
         log.info("===========================================");
+    }
+
+    @Test
+    public void testSearchReply() {
+        log.info("===================================");
+        log.info("BoardRepositoryTests >> testSearchReply START");
+
+        String[] types = {"t", "c", "w"};
+        String search_keyword = "내용";
+        PageRequest pageable = PageRequest.of(
+                1, 10,
+                Sort.by("idx").descending()
+        );
+        Page<BoardListDTO> bbsList = boardRepository.searchWithReplyCnt(pageable, types,search_keyword);
+
+        log.info("bbsList : {}", bbsList);
+        log.info("bbsList total page: {}", bbsList.getTotalPages());
+        log.info("bbsList total size : {}", bbsList.getSize());
+        log.info("bbsList page number : {}", bbsList.getNumber());
+        log.info("bbsList hasPrevious : {}", bbsList.hasPrevious());
+        log.info("bbsList hasNext : {}", bbsList.hasNext());
+        bbsList.getContent().forEach(board->log.info(board));
+
+        log.info("BoardRepositoryTests >> testSearchReply END");
+        log.info("===================================");
     }
 }

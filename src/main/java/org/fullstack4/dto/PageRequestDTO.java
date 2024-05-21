@@ -19,9 +19,10 @@ import java.net.URLEncoder;
 @Builder
 public class PageRequestDTO {
     @Builder.Default
-    @Min(1)
+
     private int total_count=0;
     @Builder.Default
+    @Min(1)
     private int page=1;
     @Builder.Default
     private int page_size=10;
